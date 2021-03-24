@@ -379,7 +379,16 @@ bool init_wifi()
 {
   // Return if no SSID configured
   if (cfg.getSsid()[0] == '\0') {
-    return false;
+    //return false;
+    const char* ssid = "ESP32-AP";
+    const char* password = "strangething";
+    WiFi.softAP(ssid, password);
+    IPAddress IP = WiFi.softAPIP();
+    Serial.print("Starteed default AP with ssid:");
+    Serial.println(ssid);
+    Serial.print("IP address is:");
+    Serial.println(IP);
+    return true;
   }
   
   Serial.printf("Connecting to '%s': ", cfg.getSsid());

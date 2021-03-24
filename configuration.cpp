@@ -155,9 +155,9 @@ int Configuration::config_set(const char *key, const char *value)
     if (strcasecmp(value, "QQVGA") == 0 ||
         strcasecmp(value, "160x120") == 0) {
       m_frame_size = FRAMESIZE_QQVGA;
-    } else if (strcasecmp(value, "QQVGA2") == 0 ||
-        strcasecmp(value, "128x160") == 0) {
-      m_frame_size = FRAMESIZE_QQVGA2;
+//    } else if (strcasecmp(value, "QQVGA2") == 0 ||
+//        strcasecmp(value, "128x160") == 0) {
+//      m_frame_size = FRAMESIZE_QQVGA2;
     } else if (strcasecmp(value, "QCIF") == 0 ||
         strcasecmp(value, "176x144") == 0) {
       m_frame_size = FRAMESIZE_QCIF;
