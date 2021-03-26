@@ -2,7 +2,7 @@
 
 import flask
 from flask import request
-from os import mkdir, chdir, listdir
+from os import mkdir, chdir, listdir, environ
 import re
 import datetime
 
@@ -25,9 +25,8 @@ def join():
                 mkdir(f"{uploads_path}/{client_id}")
                 return str(int(datetime.datetime.timestamp(datetime.datetime.now())))
             except Exception:
-                return (f"Problems: {client_id}")
+                return f"Problems: {client_id}"
     return "problems"
-
 
 
 @app.route("/lastfile", methods=["GET"])
@@ -64,9 +63,13 @@ def put():
 def home():
     return "nothing here"
 
+
 if __name__ == "__main__":
     try:
         mkdir(uploads_path)
     except Exception:
         print(f"Path {uploads_path} already exists, that's fine")
-    app.run()
+    if "HOST" in environ:
+        app.run(host=environ["HOST"])
+    else:
+        app.run()
