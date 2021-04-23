@@ -12,25 +12,24 @@ app.config["DEBUG"] = True
 re_id = re.compile("^[a-z0-9]{1,10}$")
 re_jpeg = re.compile("^[0-9]{1,20}.jpg")
 
-uploads_path = "/tmp/uploads"
-app.config["UPLOADS_PATH"] = uploads_path
-
 
 @app.route("/join", methods=["GET"])
 def join():
+    uploads_path=app.config["UPLOADS_PATH"]
     if "id" in request.args:
         client_id = request.args["id"]
         if re_id.match(client_id):
             try:
                 mkdir(f"{uploads_path}/{client_id}")
                 return str(int(datetime.datetime.timestamp(datetime.datetime.now())))
-            except Exception:
-                return f"Problems: {client_id}"
+            except Exception as e:
+                return f"Problems: {client_id} {e}"
     return "problems"
 
 
 @app.route("/lastfile", methods=["GET"])
 def lastfile():
+    uploads_path=app.config["UPLOADS_PATH"]
     if "id" in request.args:
         client_id = request.args["id"]
         if re_id.match(client_id):
@@ -45,6 +44,7 @@ def lastfile():
 
 @app.route("/put", methods=["POST"])
 def put():
+    uploads_path=app.config["UPLOADS_PATH"]
     if "id" in request.form:
         client_id = request.form["id"]
         if re_id.match(client_id):
@@ -63,12 +63,17 @@ def put():
 def home():
     return "nothing here"
 
-
-if __name__ == "__main__":
+def prepare_env():
+    uploads_path = environ.get("UPLOADS_PATH", "/tmp/uploads")
+    app.config["UPLOADS_PATH"] = uploads_path
     try:
         mkdir(uploads_path)
     except Exception:
         print(f"Path {uploads_path} already exists, that's fine")
+
+
+if __name__ == "__main__":
+    prepare_env()
     if "HOST" in environ:
         app.run(host=environ["HOST"])
     else:
